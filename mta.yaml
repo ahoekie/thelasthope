@@ -23,6 +23,18 @@ modules:
     requires:
       - name: thelasthope-db-hdi-container
       - name: thelasthope-uaa
+
+  - name: app
+    type: html5
+    path: app
+    parameters:
+       disk-quota: 256M
+       memory: 256M
+    build-parameters:
+       builder: grunt
+    requires:
+     - name: uaa_thelasthope
+
 resources:
   - name: thelasthope-db-hdi-container
     type: com.sap.xs.hdi-container
