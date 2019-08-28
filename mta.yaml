@@ -1,0 +1,38 @@
+_schema-version: 2.0.0
+ID: thelasthope
+version: 1.0.0
+modules:
+  - name: thelasthope-db
+    type: hdb
+    path: db
+    parameters:
+      memory: 256M
+      disk-quota: 256M
+    requires:
+      - name: thelasthope-db-hdi-container
+  - name: thelasthope-srv
+    type: nodejs
+    path: srv
+    parameters:
+      memory: 512M
+      disk-quota: 256M
+    provides:
+      - name: srv_api
+        properties:
+          url: ${default-url}
+    requires:
+      - name: thelasthope-db-hdi-container
+      - name: thelasthope-uaa
+resources:
+  - name: thelasthope-db-hdi-container
+    type: com.sap.xs.hdi-container
+    properties:
+      hdi-container-name: ${service-name}
+  - name: thelasthope-uaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: default
+      service: xsuaa
+      config:
+        xsappname: thelasthope-${space}
+        tenant-mode: dedicated
